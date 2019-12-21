@@ -1,0 +1,94 @@
+class student
+{
+            int admno;
+            char name[20];
+public:
+          void getdata()
+          {
+                     cout<<"\nEnter The admission no. ";
+                     cin>>admno;
+                     cout<<"\n\nEnter The Name of The Student ";
+                     gets(name);
+          }
+          void showdata()
+          {
+                     cout<<"\nAdmission no. : "<<admno;
+                     cout<<"\nStudent Name : ";
+                     puts(name);
+          }
+          int retadmno()
+          {
+                     return admno;
+          }
+};
+
+ 
+
+void write_data()
+{
+          student obj;
+          ofstream fp2;
+          fp2.open("student.dat",ios::binary|ios::app);
+          obj.getdata();
+          fp2.write((char*)&obj,sizeof(obj));
+          fp2.close();
+}
+
+void display()
+{
+          student obj;
+          ifstream fp1;
+          fp1.open("student.dat",ios::binary);
+          while(fp1.read((char*)&obj,sizeof(obj)))
+          {
+                     obj.showdata();
+          }
+}
+          fp.close();
+}
+
+
+
+
+void deleterecord(int n)
+{
+          student obj;
+          ifstream fp1;
+          fp1.open("student.dat",ios::binary);
+          ofstream fp2;
+          fp2.open("Temp.dat",ios::out|ios::binary);
+          while(fp1.read((char*)&obj,sizeof(obj)))
+          {
+                      if(obj.retadmno!=n)
+                                    fp2.write((char*)&obj,sizeof(obj));
+          }
+          fp1.close();
+          fp2.close();
+          remove("student.dat");
+          rename("Temp.dat","student.dat");
+}
+
+
+
+
+void modifyrecord(int n)
+{
+          fstream fp;
+          student obj;
+          int found=0; 
+          fp.open("student.dat",ios::in|ios::out);
+          while(fp.read((char*)&obj,sizeof(obj)) && found==0)
+          {
+                     if(obj.retadmno()==n)
+                     {
+                              obj.showdata();
+                              cout<<"\nEnter The New Details of student";
+                              obj.getdata();
+                              int pos=-1*sizeof(obj);
+                              fp.seekp(pos,ios::cur);
+                              fp.write((char*)&obj,sizeof(obj));
+                              found=1;
+                    }
+          }
+          fp.close();
+}
